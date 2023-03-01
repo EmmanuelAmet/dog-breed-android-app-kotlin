@@ -1,7 +1,9 @@
 package com.emmanuelamet.dogs.viewmodel
 
+import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.emmanuelamet.dogs.db.DogDatabase
 import com.emmanuelamet.dogs.model.DogBreed
 import com.emmanuelamet.dogs.servvice.DogApiService
 import io.reactivex.Scheduler
@@ -9,8 +11,9 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.observers.DisposableSingleObserver
 import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.launch
 
-class ListViewModel : ViewModel() {
+class ListViewModel(application: Application) : BaseViewModel(application) {
     private val dogService = DogApiService()
     private val disposable = CompositeDisposable()
 
@@ -49,8 +52,18 @@ class ListViewModel : ViewModel() {
         dogLoadError.value = false
     }
 
-    private fun storeDogsLocally(dogList: List<DogBreed>){
-
+    private fun storeDogsLocally(list: List<DogBreed>){
+        launch {
+            val dao = DogDatabase(getApplication()).dogDao()
+            dao.deleteAllDogs()
+            val result = dao.insertAll(*list.toTypedArray())
+            var i = 0
+            while(i < list.size){
+                list[i].uuid = result[i].toInt()
+                ++i
+            }
+            dogsRetrieve(list)
+        }
     }
 
     override fun onCleared() {
