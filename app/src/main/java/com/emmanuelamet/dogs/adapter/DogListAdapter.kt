@@ -45,6 +45,7 @@ class DogListAdapter(val dogList: ArrayList<DogBreed>) : RecyclerView.Adapter<Do
         }
         holder.view.setOnClickListener {
             val action = ListFragmentDirections.actionDetailFragment()
+            action.dogUuid = dogList[position].uuid
             Navigation.findNavController(it).navigate(action)
         }
     }
