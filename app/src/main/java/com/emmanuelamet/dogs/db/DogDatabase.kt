@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.emmanuelamet.dogs.R
 import com.emmanuelamet.dogs.dao.DogDao
 import com.emmanuelamet.dogs.model.DogBreed
 
@@ -24,7 +25,7 @@ abstract class DogDatabase : RoomDatabase(){
         private fun buildDatabase(context: Context) = Room.databaseBuilder(
             context.applicationContext,
             DogDatabase::class.java,
-            "dogdatabase"
+            "${R.string.database_name}"
         ).build()
     }
 }
