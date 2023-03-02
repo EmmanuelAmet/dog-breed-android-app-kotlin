@@ -1,6 +1,7 @@
 package com.emmanuelamet.dogs.viewmodel
 
 import android.app.Application
+import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.emmanuelamet.dogs.db.DogDatabase
@@ -16,6 +17,7 @@ import kotlinx.coroutines.launch
 
 class ListViewModel(application: Application) : BaseViewModel(application) {
 
+    private val refreshTime  = 5 * 60 * 1000 * 1000 * 1000L
     private val prefHelper = SharedPreferencesHelper(getApplication())
     private val dogService = DogApiService()
     private val disposable = CompositeDisposable()
@@ -25,7 +27,13 @@ class ListViewModel(application: Application) : BaseViewModel(application) {
     val loading  = MutableLiveData<Boolean>()
 
     fun refresh(){
-        fetchFromRemote()
+        val updateTime  = prefHelper.getUpdateTime()
+        if(updateTime != null && updateTime != 0L && System.nanoTime() - updateTime < refreshTime){
+            fetchFromDatabase()
+        }else{
+            fetchFromRemote()
+        }
+
     }
 
     private fun fetchFromRemote(){
@@ -37,6 +45,7 @@ class ListViewModel(application: Application) : BaseViewModel(application) {
                 .subscribeWith(object : DisposableSingleObserver<List<DogBreed>>(){
                     override fun onSuccess(dogList: List<DogBreed>) {
                         storeDogsLocally(dogList)
+                        Toast.makeText(getApplication(), "Dogs retrieved from endpoint.", Toast.LENGTH_LONG).show()
                     }
 
                     override fun onError(error: Throwable) {
@@ -49,11 +58,27 @@ class ListViewModel(application: Application) : BaseViewModel(application) {
         )
     }
 
+    private fun fetchFromDatabase(){
+        loading.value = true
+        launch {
+            val dogs =  DogDatabase(getApplication())
+                .dogDao()
+                .getAllDogs()
+            dogsRetrieve(dogs)
+            Toast.makeText(getApplication(), "Dogs retrieved from local database", Toast.LENGTH_LONG).show()
+        }
+    }
+
+    fun refreshByPassCache(){
+        fetchFromRemote()
+    }
+
     private fun dogsRetrieve(dogList : List<DogBreed>){
         dogs.value = dogList
         loading.value = false
         dogLoadError.value = false
     }
+
 
     private fun storeDogsLocally(list: List<DogBreed>){
         launch {
