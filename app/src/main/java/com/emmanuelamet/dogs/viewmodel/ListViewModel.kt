@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.emmanuelamet.dogs.db.DogDatabase
 import com.emmanuelamet.dogs.model.DogBreed
+import com.emmanuelamet.dogs.nofication.NotificationHelper
 import com.emmanuelamet.dogs.pref.SharedPreferencesHelper
 import com.emmanuelamet.dogs.servvice.DogApiService
 import io.reactivex.Scheduler
@@ -66,6 +67,7 @@ class ListViewModel(application: Application) : BaseViewModel(application) {
                 .getAllDogs()
             dogsRetrieve(dogs)
             Toast.makeText(getApplication(), "Dogs retrieved from local database", Toast.LENGTH_LONG).show()
+            NotificationHelper(getApplication()).createNotification()
         }
     }
 
