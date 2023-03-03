@@ -18,7 +18,7 @@ import kotlinx.coroutines.launch
 
 class ListViewModel(application: Application) : BaseViewModel(application) {
 
-    private val refreshTime  = 5 * 60 * 1000 * 1000 * 1000L
+    private var refreshTime  = 5 * 60 * 1000 * 1000 * 1000L
     private val prefHelper = SharedPreferencesHelper(getApplication())
     private val dogService = DogApiService()
     private val disposable = CompositeDisposable()
@@ -28,6 +28,7 @@ class ListViewModel(application: Application) : BaseViewModel(application) {
     val loading  = MutableLiveData<Boolean>()
 
     fun refresh(){
+        checkCacheDuration()
         val updateTime  = prefHelper.getUpdateTime()
         if(updateTime != null && updateTime != 0L && System.nanoTime() - updateTime < refreshTime){
             fetchFromDatabase()
@@ -37,6 +38,15 @@ class ListViewModel(application: Application) : BaseViewModel(application) {
 
     }
 
+    private fun checkCacheDuration(){
+        val cachePreference = prefHelper.getCacheDuration()
+        try {
+            val cachePreferenceInt = cachePreference?.toInt() ?: (5 * 60)
+            refreshTime = cachePreferenceInt.times(60 * 1000 * 1000 * 1000L)
+        }catch (e: java.lang.NumberFormatException){
+            e.printStackTrace()
+        }
+    }
     private fun fetchFromRemote(){
         loading.value = true
         disposable.add(
