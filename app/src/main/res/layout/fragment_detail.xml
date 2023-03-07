@@ -1,19 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+        <variable
+            name="dog"
+            type="com.emmanuelamet.dogs.model.DogBreed" />
+
+        <variable
+            name="palette"
+            type="com.emmanuelamet.dogs.model.DogPalette" />
+    </data>
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        android:background="@{palette.color}"
         tools:context=".view.DetailFragment">
 
         <ImageView
-            android:id="@+id/dogImage"
+            android:id="@+id/imageView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:src="@mipmap/ic_launcher"
             android:scaleType="fitCenter"
             android:minHeight="200dp"
             android:layout_alignParentTop="true"/>
@@ -22,10 +30,10 @@
             android:id="@+id/dogName"
             style="@style/Title"
             android:layout_centerHorizontal="true"
-            android:layout_below="@id/dogImage"
+            android:layout_below="@id/imageView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="DogName"/>
+            android:text="@{dog.dogBreed}"/>
 
         <TextView
         android:id="@+id/dogPurpose"
@@ -34,7 +42,7 @@
         android:layout_below="@id/dogName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Purpose"/>
+        android:text="@{dog.breedFor}"/>
 
         <TextView
             android:id="@+id/dogTemperament"
@@ -43,7 +51,7 @@
             android:layout_below="@id/dogPurpose"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Temperament"/>
+            android:text="@{dog.temperament}"/>
 
         <TextView
             android:id="@+id/lifeSpan"
@@ -52,7 +60,7 @@
             android:layout_below="@id/dogTemperament"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="lifeSpan"/>
+            android:text="@{dog.lifeSpan}"/>
     </RelativeLayout>
 
 </layout>
