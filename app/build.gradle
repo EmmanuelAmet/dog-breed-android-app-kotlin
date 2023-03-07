@@ -16,7 +16,7 @@ android {
         targetSdk 33
         versionCode 1
         versionName "1.0"
-        multiDexEnabled true
+        multiDexEnabled true // this will allow your app to execute over 65,536 methods
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
