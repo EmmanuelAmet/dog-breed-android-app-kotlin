@@ -4,4 +4,7 @@
     <item
         android:id="@+id/actionSettings"
         android:title="Settings"/>
+    <item
+        android:id="@+id/actionExpanded"
+        android:title="Expanded"/>
 </menu>

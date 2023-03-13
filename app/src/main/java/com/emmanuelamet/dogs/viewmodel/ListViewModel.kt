@@ -56,7 +56,8 @@ class ListViewModel(application: Application) : BaseViewModel(application) {
                 .subscribeWith(object : DisposableSingleObserver<List<DogBreed>>(){
                     override fun onSuccess(dogList: List<DogBreed>) {
                         storeDogsLocally(dogList)
-                        Toast.makeText(getApplication(), "Dogs retrieved from endpoint.", Toast.LENGTH_LONG).show()
+                       Toast.makeText(getApplication(), "Dog breeds retrieved from the remote server.", Toast.LENGTH_LONG).show()
+                        NotificationHelper(getApplication()).createNotification()
                     }
 
                     override fun onError(error: Throwable) {
@@ -76,8 +77,6 @@ class ListViewModel(application: Application) : BaseViewModel(application) {
                 .dogDao()
                 .getAllDogs()
             dogsRetrieve(dogs)
-            Toast.makeText(getApplication(), "Dogs retrieved from local database", Toast.LENGTH_LONG).show()
-            NotificationHelper(getApplication()).createNotification()
         }
     }
 

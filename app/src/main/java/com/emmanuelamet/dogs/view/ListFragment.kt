@@ -91,6 +91,11 @@ class ListFragment : Fragment() {
                     Navigation.findNavController(it).navigate(ListFragmentDirections.actionListFragmentToSettingsFragment())
                 }
             }
+            R.id.actionExpanded -> {
+                view?.let{
+                    Navigation.findNavController(it).navigate(ListFragmentDirections.actionListFragmentToExpandedFragment())
+                }
+            }
         }
         return super.onOptionsItemSelected(item)
     }

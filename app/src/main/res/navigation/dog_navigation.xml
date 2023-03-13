@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/dog_navigation"
     app:startDestination="@id/listFragment">
 
@@ -16,6 +17,9 @@
         <action
             android:id="@+id/action_listFragment_to_settingsFragment"
             app:destination="@id/settingsFragment" />
+        <action
+            android:id="@+id/action_listFragment_to_expandedFragment"
+            app:destination="@id/expandedFragment" />
     </fragment>
     <fragment
         android:id="@+id/detailFragment"
@@ -36,6 +40,15 @@
         android:label="SettingsFragment" >
         <action
             android:id="@+id/action_settingsFragment_to_listFragment"
+            app:destination="@id/listFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/expandedFragment"
+        android:name="com.emmanuelamet.dogs.view.ExpandedFragment"
+        android:label="fragment_expanded"
+        tools:layout="@layout/fragment_expanded" >
+        <action
+            android:id="@+id/action_expandedFragment_to_listFragment"
             app:destination="@id/listFragment" />
     </fragment>
 </navigation>
